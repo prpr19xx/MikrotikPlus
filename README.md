@@ -15,7 +15,7 @@ It does not use any dependencies at all.
 
 This is how we establish a connection to a Mikrotik device:
 ```cpp
-#include "mikrotikplus/connector.hpp
+#include "mikrotikplus/connector.hpp"
 
 int main() {
 	MIKROTIKPLUS::Connector mikrotik_connection = MIKROTIKPLUS::Connector(ip, username, password, port);
@@ -25,7 +25,7 @@ int main() {
 
 On an unsuccessful login, this throws the `MIKROTIKPLUS::LoginIncorrect` exception. If the target is unavailable, it will throw `MIKROTIKPLUS::NoSocketConnection`. When the latter exception gets thrown, the connector assumes that you provided correct details and that the target is down, so it tries to reconnect to it. (I have to fix this..)
 ```cpp
-#include "mikrotikplus/connector.hpp
+#include "mikrotikplus/connector.hpp"
 #include "mikrotikplus/exceptions.hpp"
 
 int main() {
@@ -40,7 +40,7 @@ Now let's write and read sentences. We can also get a mapped parsed version of t
 You have to read the sentences in a loop or else you will receive only the first one.
 
 ```cpp
-#include "mikrotikplus/connector.hpp
+#include "mikrotikplus/connector.hpp"
 #include "mikrotikplus/sentence.hpp"
 #include "mikrotikplus/exceptions.hpp"
 
