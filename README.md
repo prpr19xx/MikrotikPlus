@@ -1,5 +1,5 @@
 # MikrotikPlus
-C++ connector which connects to the Mikrotik/RouterOS API and wraps it.
+An up-to-date C++ connector which connects to the Mikrotik/RouterOS API and wraps it.
 
 ## Table of Contents
 * [General info](#general-info)
@@ -10,6 +10,7 @@ C++ connector which connects to the Mikrotik/RouterOS API and wraps it.
 
 It works well under Windows, Linux and possibly Mac.
 It does not use any dependencies at all.
+This supports only versions 6.43 and up of RouterOS.
 
 ## Usage And Examples
 
@@ -47,7 +48,7 @@ The keys and values are without the delimiters. For instance, if the API returns
 Then the map will be this:
 
 ```
-	{key, value}
+{key, value}
 ```
 
 Here is an example:
@@ -59,8 +60,6 @@ Here is an example:
 	// Read into read_sentence
 
 	sentence_map = read_sentence.getMap();
-
-
 ```
 
 Now let's write and read sentences.
