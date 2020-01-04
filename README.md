@@ -54,12 +54,13 @@ Then the map will be this:
 Here is an example:
 
 ```cpp
-	std::unordered_map<std::string, std::string> sentence_map
+std::unordered_map<std::string, std::string> sentence_map
 
-	MIKROTIKPLUS::Sentence read_sentence;
-	// Read into read_sentence
+MIKROTIKPLUS::Sentence read_sentence;
 
-	sentence_map = read_sentence.getMap();
+// Read into read_sentence
+
+sentence_map = read_sentence.getMap();
 ```
 
 Now let's write and read sentences.
