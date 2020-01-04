@@ -102,6 +102,9 @@ int main() {
 }
 ```
 
+You may view an example in the form of a full working program below. It parses the snooped data and inserts it into the database.
+https://github.com/zx2512/MikrotikSnooperToMySQL
+
 ## Building
 To build this, you will have to download the source code and navigate to its directory. Then, you will do this:
 ```
