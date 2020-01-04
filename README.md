@@ -36,7 +36,34 @@ int main() {
 	}
 }
 ```
-Now let's write and read sentences. We can also get a mapped parsed version of the read sentence.
+
+We can obtain a mapped version of the sentence.
+The keys and values are without the delimiters. For instance, if the API returns this:
+
+```
+=key=value
+```
+
+Then the map will be this:
+
+```
+	{key, value}
+```
+
+Here is an example:
+
+```cpp
+	std::unordered_map<std::string, std::string> sentence_map
+
+	MIKROTIKPLUS::Sentence read_sentence;
+	// Read into read_sentence
+
+	sentence_map = read_sentence.getMap();
+
+
+```
+
+Now let's write and read sentences.
 You have to read the sentences in a loop or else you will receive only the first one.
 
 ```cpp
