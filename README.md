@@ -3,7 +3,7 @@ An up-to-date C++ connector which connects to the Mikrotik/RouterOS API and wrap
 
 ## Table of Contents
 * [General info](#general-info)
-* [Usage and examples](#useage-and-examples)
+* [Usage and examples](#usage-and-examples)
 * [Building](#building)
 
 ## General Info
