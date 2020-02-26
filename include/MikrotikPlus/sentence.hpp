@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <unordered_map>
+#include <algorithm>
 #include "enums.hpp"
 
 namespace MIKROTIKPLUS {
@@ -23,28 +24,24 @@ namespace MIKROTIKPLUS {
 
 	public:
 
-		Sentence() {
-
-			this->delimiter = '=';
-
-		}
+		Sentence() : delimiter('='), type(SENTENCE_TYPES::NONE) { }
 
 		const std::string& operator[](size_t index) const {
-			return words[index];
+			return this->words[index];
 		}
 
 		const std::string& at(size_t index) const {
-			return words.at(index);
+			return this->words.at(index);
 		}
 
 		std::unordered_map<std::string, std::string> getMap();
 
 		SENTENCE_TYPES getType() const {
-			return type;
+			return this->type;
 		}
 
 		const size_t getLength() const {
-			return words.size();
+			return this->words.size();
 		}
 
 		void setType(SENTENCE_TYPES type) {
@@ -52,7 +49,11 @@ namespace MIKROTIKPLUS {
 		}
 
 		void addWord(const std::string &word_to_add) {
-			words.push_back(word_to_add);
+			this->words.push_back(word_to_add);
+		}
+
+		void clear() {
+			this->words.clear();
 		}
 
 		friend std::ostream &operator<<(std::ostream &out, const Sentence &sentence);

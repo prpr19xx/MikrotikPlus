@@ -1,4 +1,4 @@
-#include "sentence.hpp"
+#include "MikrotikPlus/sentence.hpp"
 
 namespace MIKROTIKPLUS {
 
@@ -6,12 +6,20 @@ namespace MIKROTIKPLUS {
 
 		std::unordered_map<std::string, std::string> sentence_map;
 
+		int delimiter_count;
+
 		for (auto it = this->words.begin(); it != this->words.end(); ++it) {
 
+			delimiter_count = std::count((*it).begin(), (*it).end(), this->delimiter);
+
 			// If the first character of the word is not a delimiter, then ignore it as it doesn't need to be parsed
- 			if ((*it)[0] == this->delimiter) {
+ 			if (((*it)[0] == this->delimiter) && (delimiter_count > 1)) {
 
 				sentence_map.insert(tokenize(*it));
+
+			} else if (((*it)[0] == this->delimiter) && (delimiter_count == 1)) {
+
+				sentence_map.insert({(*it), ""});
 
 			}
 			

@@ -1,9 +1,10 @@
-#include "connector.hpp"
+#include "MikrotikPlus/connector.hpp"
 
 namespace MIKROTIKPLUS {
 
 	Connector::Connector(const std::string &ip_address, const std::string &username,
-			 const std::string &password, const int port): api_settings(ip_address, username, password, port, true) {
+						 const std::string &password, const int port): api_settings(ip_address, username, password, port, true),
+							sock_fd(-1337) {
 
 #if defined _WIN32
 
@@ -13,73 +14,57 @@ namespace MIKROTIKPLUS {
 		int wsa_return = WSAStartup(versionWanted, &wsaData);
 
 		if (wsa_return != 0) {
+			
 			std::cerr << "Winsock failed to initialize itself" << "\n";
 			std::cerr << "Winsock error code: " << wsa_return << "\n";
+			std::cerr << "Terminating the program." << "\n";
+
+			exit(-1);
+
 		}
 
 #endif
 
-		connectAndLogin();
+		//connectAndLogin();
 
 	}
 
 	Connector::~Connector() {
 
-		disconnectAPI();
+		this->closeSocket();
 
 	}
 
 	void Connector::connectAndLogin() {
 
-		while (true) {
+		connectAPI();
 
-			try {
+		if (sock_fd != -1) {
 
-				connectAPI();
+			bool loginResult = login();
 
-				if (sock_fd != -1) {
+			if (!loginResult) {
 
-					bool loginResult = login();
+				this->closeSocket();
 
-					if (!loginResult) {
-
-						disconnectAPI();
-
-						throw LoginIncorrect("Invalid login details");
-
-					} else {
-
-						//std::cout << "Logged in successfully" << "\n";
-
-						break;
-
-					}
-
-				} else {
-
-					throw NoSocketConnection("Failed to initiate a connection.");
-
-				}
-
-			} catch (NoSocketConnection e) {
-
-				std::cerr << "Failed to connect to " << this->api_settings.getIP() << ":" << this->api_settings.getPort() << "\n";
-
-				continue;
+				throw LoginIncorrect("Invalid login details");
 
 			}
+
+		} else {
+
+			throw NoSocketConnection("Failed to connect to " + this->api_settings.getIP() + ":" + std::to_string(this->api_settings.getPort()) + "\n");
 
 		}
 
 	}
 
-	 // Connects to the API
-	 // Sets the value of member fd_sock variable accordingly
+	// Attempts to initiate a connection to the API
 	void Connector::connectAPI() {
 
 		struct sockaddr_in address;
-		int connect_result;
-		int address_size;
+		int connect_result = 0;
+		int address_size = 0;
 
 		sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -95,17 +80,11 @@ namespace MIKROTIKPLUS {
 
 			//std::cerr << "Connection problem" << "\n";
 
-			disconnectAPI();
+			this->closeSocket();
 
 			sock_fd = -1;
 
 		}
-
-	}
-
-	void Connector::disconnectAPI() const {
-
-		this->closeSocket();
 
 	}
 
@@ -126,7 +105,7 @@ namespace MIKROTIKPLUS {
 
 		if (read_sentence.getType() != SENTENCE_TYPES::DONE) {
 
-			std::cerr << "Error" << "\n";
+			//std::cerr << "Error" << "\n";
 
 			return false;
 
@@ -304,6 +283,7 @@ namespace MIKROTIKPLUS {
 				}
 
 				word = readWord();
+
 			}
 
 			// Get the next sentence if any errors get encountered
@@ -323,12 +303,17 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	std::string Connector::receiveSocket(const size_t length, const int flags) {
+	std::string Connector::receiveSocket(const int length, const int flags) {
 
-		size_t to_read = length;
+		int to_read = length;
 
 		std::vector<char> buffer;
-		buffer.resize(length);
+
+		if (length > 0) {
+
+			buffer.resize(length);
+
+		}
 
 		while (to_read > 0) {
 
@@ -338,13 +323,12 @@ namespace MIKROTIKPLUS {
 			// Ideally, this should never happen but sometimes it does when the application gets halted for too long
 			if (received <= 0) {
 
-				std::cerr << "Failed to read" << "\n";
-				std::cerr << "recv returned: " << received << " " << WSAGetLastError() << "\n";
+				/*std::cerr << "Failed to read" << "\n";
+				std::cerr << "recv returned: " << received << " " << WSAGetLastError() << "\n";*/
 
-				disconnectAPI();
-				connectAndLogin();
+				this->closeSocket();
 
-				throw ConnectionDropped("The connection has been closed");
+				throw ConnectionTimedOut("The connection has been timed out whilst reading data");
 
 			}
 
@@ -356,9 +340,9 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	int Connector::sendSocket(const char *data, const size_t length, const int flags) const {
+	int Connector::sendSocket(const char *data, const int length, const int flags) const {
 
-		int return_value;
+		int return_value = 1337;
 
 #if defined _WIN32
 
@@ -369,6 +353,12 @@ namespace MIKROTIKPLUS {
 		return_value = write(this->sock_fd, data, length);
 
 #endif
+
+		/*int error = 0;
+		socklen_t len = sizeof(error);
+		int retval = getsockopt(this->sock_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
+
+		std::cout << retval << "\n";*/
 
 		return return_value;
 

@@ -1,24 +1,56 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.10)
 
-project (MikrotikPlus)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-# Set C++ version
+project(MikrotikPlus VERSION 0.03.0)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Locate files
-file(GLOB MikrotikPlus_HEADERS include/MikrotikPlus/*.hpp)
-file(GLOB MikrotikPlus_SOURCES src/*.cpp)
+file(GLOB_RECURSE HEADERS_LIST CONFIGURE_DEPENDS include/MikrotikPlus/*.hpp)
+file(GLOB_RECURSE SOURCES_LIST "src/*.cpp")
 
-# Set up target
-add_library(MikrotikPlus ${MikrotikPlus_SOURCES})
+add_library(
+    MikrotikPlus STATIC
+    ${SOURCES_LIST}
+)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include/MikrotikPlus)
+target_sources(MikrotikPlus PUBLIC $<BUILD_INTERFACE:${HEADERS_LIST}>)
 
-# Installation configuration
-install(FILES ${MikrotikPlus_HEADERS} DESTINATION include)
-install(TARGETS MikrotikPlus
-	ARCHIVE DESTINATION lib
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
+target_include_directories(
+    MikrotikPlus PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+include(GNUInstallDirs)
+
+set(INSTALL_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/MikrotikPlus/cmake)
+
+install(
+    TARGETS MikrotikPlus
+    EXPORT MikrotikPlusConfig
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(
+    EXPORT MikrotikPlusConfig
+    NAMESPACE MikrotikPlus::
+    DESTINATION ${INSTALL_CMAKE_DIR}
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/MikrotikPlusConfig-version.cmake
+    COMPATIBILITY SameMajorVersion
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/MikrotikPlusConfig-version.cmake
+    DESTINATION ${INSTALL_CMAKE_DIR}
 )
