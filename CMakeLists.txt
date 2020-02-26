@@ -31,6 +31,7 @@ install(
     TARGETS MikrotikPlus
     EXPORT MikrotikPlusConfig
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION lib
 )
 
 install(
