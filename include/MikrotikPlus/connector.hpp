@@ -28,10 +28,14 @@
 #include <cstring>
 #include <vector>
 #include <string>
-#include "exceptions.hpp"
-#include "enums.hpp"
-#include "sentence.hpp"
-#include "api_settings.hpp"
+
+#include "MikrotikPlus/md5.hpp"
+
+#include "MikrotikPlus/exceptions.hpp"
+#include "MikrotikPlus/enums.hpp"
+#include "MikrotikPlus/sentence.hpp"
+#include "MikrotikPlus/api_settings.hpp"
+#include "MikrotikPlus/util.hpp"
 
 namespace MIKROTIKPLUS {
 

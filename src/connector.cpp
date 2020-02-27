@@ -111,6 +111,43 @@ namespace MIKROTIKPLUS {
 
 		}
 
+		std::unordered_map<std::string, std::string> sentence_map;
+
+		sentence_map = read_sentence.getMap();
+
+		if (sentence_map.find("ret") != sentence_map.end()) {
+
+			write_sentence.clear();
+
+			write_sentence.addWord("/login");
+			write_sentence.addWord("=name=" + this->api_settings.getUser());
+
+			std::vector<char> bytes = UTIL::hexToBytes(sentence_map["ret"]);
+
+			MD5 _md5;
+
+			char null_character[1] = { 0 };
+
+			_md5.update(null_character, 1);
+			_md5.update(this->api_settings.getPassword().c_str(), this->api_settings.getPassword().size());
+			_md5.update(bytes.data(), bytes.size());
+			_md5.finalize();
+
+			write_sentence.addWord("=response=00" + _md5.hexdigest());
+
+			writeSentence(write_sentence);
+
+			read_sentence = readSentence();
+
+			if (read_sentence.getType() != SENTENCE_TYPES::DONE) {
+
+				return false;
+
+			}
+
+		}
+
+		
 		return true;
 
 	}
@@ -251,7 +288,7 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	 // Reads a sentence from the socket
+	// Reads a sentence from the socket
 	Sentence Connector::readSentence() {
 
 		Sentence sentence;
@@ -264,7 +301,11 @@ namespace MIKROTIKPLUS {
 
 				sentence.addWord(word);
 
-				if (word.find("!done") != std::string::npos) {
+				if (word.at(0) != '!') {
+
+					// Do nothing
+
+				} else if (word.find("!done") != std::string::npos) {
 
 					sentence.setType(SENTENCE_TYPES::DONE);
 

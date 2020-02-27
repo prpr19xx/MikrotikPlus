@@ -2,7 +2,7 @@
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-project(MikrotikPlus VERSION 0.03.0)
+project(MikrotikPlus VERSION 0.04.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
