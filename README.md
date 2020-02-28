@@ -10,7 +10,6 @@ An up-to-date C++ connector which connects to the Mikrotik/RouterOS API and wrap
 
 It works well under Windows, Linux and possibly Mac.
 It does not use any dependencies at all.
-This supports only versions 6.43 and up of RouterOS.
 
 ## Usage And Examples
 
