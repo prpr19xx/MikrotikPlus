@@ -3,6 +3,7 @@ An up-to-date C++ connector which connects to the Mikrotik/RouterOS API and wrap
 
 ## Table of Contents
 * [General info](#general-info)
+* [TODO](#todo)
 * [Usage and examples](#usage-and-examples)
 * [Building](#building)
 
@@ -10,6 +11,11 @@ An up-to-date C++ connector which connects to the Mikrotik/RouterOS API and wrap
 
 It works well under Windows, Linux and possibly Mac.
 It does not use any dependencies at all.
+
+## TODO
+
+* Better guide and documentation
+* TLS support
 
 ## Usage And Examples
 
