@@ -30,12 +30,13 @@ documentation and/or software.
 
 */
 
+#define _CRT_SECURE_NO_WARNINGS
+
 /* interface header */
 #include "MikrotikPlus/md5.hpp"
 
 /* system implementation headers */
 #include <cstdio>
-
 
 // Constants for MD5Transform routine.
 #define S11 7

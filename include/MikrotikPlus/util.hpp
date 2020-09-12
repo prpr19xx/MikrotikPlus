@@ -5,7 +5,7 @@ namespace MIKROTIKPLUS {
 
     namespace UTIL {
 
-        std::vector<char> hexToBytes(const std::string &hex);
+        std::vector<char> hexToBytes(const std::string& hex);
 
     }
 

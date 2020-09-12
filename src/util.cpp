@@ -2,7 +2,7 @@
 
 namespace MIKROTIKPLUS {
 
-	namespace UTIL {
+    namespace UTIL {
 
         std::vector<char> hexToBytes(const std::string& hex) {
 
@@ -20,6 +20,6 @@ namespace MIKROTIKPLUS {
             return bytes;
         }
 
-	}
+    }
 
 }

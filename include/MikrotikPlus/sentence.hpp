@@ -20,7 +20,7 @@ namespace MIKROTIKPLUS {
 
 		std::vector<std::string> words;
 
-		std::pair<std::string, std::string> tokenize(const std::string &target);
+		std::pair<std::string, std::string> tokenize(const std::string& target);
 
 	public:
 
@@ -44,11 +44,11 @@ namespace MIKROTIKPLUS {
 			return this->words.size();
 		}
 
-		void setType(SENTENCE_TYPES type) {
+		void setType(const SENTENCE_TYPES type) {
 			this->type = type;
 		}
 
-		void addWord(const std::string &word_to_add) {
+		void addWord(const std::string& word_to_add) {
 			this->words.push_back(word_to_add);
 		}
 
@@ -56,7 +56,7 @@ namespace MIKROTIKPLUS {
 			this->words.clear();
 		}
 
-		friend std::ostream &operator<<(std::ostream &out, const Sentence &sentence);
+		friend std::ostream& operator<<(std::ostream& out, const Sentence& sentence);
 
 	};
 

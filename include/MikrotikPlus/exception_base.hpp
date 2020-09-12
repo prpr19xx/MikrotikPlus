@@ -5,16 +5,16 @@
 
 namespace MIKROTIKPLUS {
 
-	class ExceptionBase: public std::exception {
+	class ExceptionBase : public std::exception {
 	private:
 
 		std::string message;
 
 	public:
 
-		ExceptionBase(const std::string &message): message(message) { }
+		ExceptionBase(const std::string& message) : message(message) { }
 
-		virtual const char *what() const noexcept override {
+		virtual const char* what() const noexcept override {
 			return this->message.c_str();
 		}
 

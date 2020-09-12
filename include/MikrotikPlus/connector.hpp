@@ -42,50 +42,59 @@ namespace MIKROTIKPLUS {
 	class Connector {
 
 	private:
-		
+
 		APISettings api_settings;
 
 		int sock_fd;
 
-		
-		void connectAPI();
+		// Receives and returns data from the socket
+		std::string receiveData(const int length, const int flags);
 
-		//void disconnectAPI() const;
+		// Encode the the word length and write it to the sock
+		void encodeLength(const int message_length);
 
+		// Decode the word length and return it
+		int decodeLength();
 
-		int sendSocket(const char *data, const int length, const int flags) const;
+		// Writes a word to the socket
+		void writeWord(const std::string& str_word);
 
-		std::string receiveSocket(const int length, const int flags);
-
-
-		void writeLength(const int message_length);
-
-		int readLength();
-
-		void writeWord(const std::string &str_word);
-
+		// Reads a word from the socket
 		std::string readWord();
 
 	public:
 
-		Connector(const std::string &ip_address, const std::string &username,
-					const std::string &password, const int port);
+		Connector(const std::string& ip_address, const std::string& username,
+			const std::string& password, const int port);
 
 		virtual ~Connector();
 
+		// Attemps to login into the API
+		// true is returned on successful login
 		bool login();
 
-		void writeSentence(const Sentence &write_sentence);
-		
+		// Writes a sentence (multiple words) to the socket
+		void writeSentence(const Sentence& write_sentence);
+
+		// Reads a sentence (muktiple words) from the socket
 		Sentence readSentence();
 
+		// d
 		void connectAndLogin();
+
+		// Attemps to initiate connection to the API
+		void connectAPI();
+
+		void closeSocket() const;
+
+		// Returns false if sock_fd is -1, true otherwise
+		const bool isSockDescriptorValid() const {
+			return this->sock_fd == -1 ? false : true;
+		}
 
 		const APISettings& getAPISettings() const {
 			return this->api_settings;
 		}
-
-		void closeSocket() const;
 
 	};
 

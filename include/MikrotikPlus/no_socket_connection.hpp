@@ -4,11 +4,11 @@
 
 namespace MIKROTIKPLUS {
 
-	class NoSocketConnection: public ExceptionBase {
+	class NoSocketConnection : public ExceptionBase {
 
 	public:
 
-		NoSocketConnection(const std::string &message): ExceptionBase(message) { }
+		NoSocketConnection(const std::string& message) : ExceptionBase(message) { }
 
 	};
 

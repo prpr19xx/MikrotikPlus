@@ -4,11 +4,11 @@
 
 namespace MIKROTIKPLUS {
 
-	class ConnectionTimedOut: public ExceptionBase {
+	class ConnectionTimedOut : public ExceptionBase {
 
 	public:
 
-		ConnectionTimedOut(const std::string &message): ExceptionBase(message) { }
+		ConnectionTimedOut(const std::string& message) : ExceptionBase(message) { }
 
 	};
 
