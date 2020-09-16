@@ -91,7 +91,7 @@ do {
 
 	read_sentence = mikrotik.readSentence();
 
-	sentence_map = read_sentence.getMap();
+    sentence_map = read_sentence.getMap();
 
     auto it = sentence_map.find("version");
 
@@ -99,7 +99,7 @@ do {
 
         if (*it == "6.7") {
 
-    		std::cout << "You have the latest version";
+	    	std::cout << "You have the latest version";
 
             break;
 
@@ -149,7 +149,7 @@ try {
 
 	    read_sentence = mikrotik.readSentence();
 
-    	// Read some data on an infinite loop
+        // Read some data on an infinite loop
         // Process it
 
     } while (read_sentence.getType() == MikrotikPlus::SENTENCE_TYPES::CONTINUE);
