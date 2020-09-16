@@ -1,11 +1,11 @@
 #include <string>
 #include <vector>
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
     namespace UTIL {
 
-        std::vector<char> hexToBytes(const std::string& hex);
+        std::vector<char> hexToBytes(const std::string &hex);
 
     }
 

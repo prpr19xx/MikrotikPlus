@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	class ExceptionBase : public std::exception {
 	private:
@@ -12,9 +12,9 @@ namespace MIKROTIKPLUS {
 
 	public:
 
-		ExceptionBase(const std::string& message) : message(message) { }
+		ExceptionBase(const std::string &message): message(message) {}
 
-		virtual const char* what() const noexcept override {
+		virtual const char *what() const noexcept override {
 			return this->message.c_str();
 		}
 

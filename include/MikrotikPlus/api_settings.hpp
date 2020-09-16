@@ -1,6 +1,6 @@
 #include <string>
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	class APISettings {
 
@@ -14,19 +14,19 @@ namespace MIKROTIKPLUS {
 
 	public:
 
-		APISettings(const std::string& ip, const std::string& user, const std::string& password,
-			const int port, const bool secure) : ip(ip), user(user), password(password),
-			port(port), secure(secure) { }
+		APISettings(const std::string &ip, const std::string &user, const std::string &password,
+			const int port, const bool secure): ip(ip), user(user), password(password),
+			port(port), secure(secure) {}
 
-		const std::string& getIP() const {
+		const std::string &getIP() const {
 			return this->ip;
 		}
 
-		const std::string& getUser() const {
+		const std::string &getUser() const {
 			return this->user;
 		}
 
-		const std::string& getPassword() const {
+		const std::string &getPassword() const {
 			return this->password;
 		}
 

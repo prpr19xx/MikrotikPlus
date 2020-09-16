@@ -2,13 +2,13 @@
 
 #include "exception_base.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	class ConnectionTimedOut : public ExceptionBase {
 
 	public:
 
-		ConnectionTimedOut(const std::string& message) : ExceptionBase(message) { }
+		ConnectionTimedOut(const std::string &message): ExceptionBase(message) {}
 
 	};
 

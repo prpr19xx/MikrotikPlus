@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	enum class SENTENCE_TYPES {
 		NONE,

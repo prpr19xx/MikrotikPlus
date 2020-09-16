@@ -1,6 +1,6 @@
 #include "MikrotikPlus/sentence.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	std::unordered_map<std::string, std::string> Sentence::getMap() {
 
@@ -17,8 +17,7 @@ namespace MIKROTIKPLUS {
 
 				sentence_map.insert(tokenize(*it));
 
-			}
-			else if (((*it)[0] == this->delimiter) && (delimiter_count == 1)) {
+			} else if (((*it)[0] == this->delimiter) && (delimiter_count == 1)) {
 
 				sentence_map.insert({ (*it), "" });
 
@@ -30,7 +29,7 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	std::pair<std::string, std::string> Sentence::tokenize(const std::string& target) {
+	std::pair<std::string, std::string> Sentence::tokenize(const std::string &target) {
 
 		size_t pos = 0;
 
@@ -44,7 +43,7 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	std::ostream& operator<<(std::ostream& out, const Sentence& sentence) {
+	std::ostream &operator<<(std::ostream &out, const Sentence &sentence) {
 
 		for (auto it = sentence.words.begin(); it != sentence.words.end(); ++it) {
 			out << *it << "\n";

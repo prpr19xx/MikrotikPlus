@@ -1,10 +1,10 @@
 #include "MikrotikPlus/util.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
     namespace UTIL {
 
-        std::vector<char> hexToBytes(const std::string& hex) {
+        std::vector<char> hexToBytes(const std::string &hex) {
 
             std::vector<char> bytes;
 

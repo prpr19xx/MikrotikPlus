@@ -37,7 +37,7 @@
 #include "MikrotikPlus/api_settings.hpp"
 #include "MikrotikPlus/util.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	class Connector {
 
@@ -56,16 +56,10 @@ namespace MIKROTIKPLUS {
 		// Decode the word length and return it
 		int decodeLength();
 
-		// Writes a word to the socket
-		void writeWord(const std::string& str_word);
-
-		// Reads a word from the socket
-		std::string readWord();
-
 	public:
 
-		Connector(const std::string& ip_address, const std::string& username,
-			const std::string& password, const int port);
+		Connector(const std::string &ip_address, const std::string &username,
+			const std::string &password, const int port);
 
 		virtual ~Connector();
 
@@ -74,13 +68,16 @@ namespace MIKROTIKPLUS {
 		bool login();
 
 		// Writes a sentence (multiple words) to the socket
-		void writeSentence(const Sentence& write_sentence);
+		void write(const Sentence &sentence);
+
+		// Writes a word to the socket
+		void write(const std::string &word);
 
 		// Reads a sentence (muktiple words) from the socket
 		Sentence readSentence();
 
-		// d
-		void connectAndLogin();
+		// Reads a word from the socket
+		std::string readWord();
 
 		// Attemps to initiate connection to the API
 		void connectAPI();
@@ -92,7 +89,7 @@ namespace MIKROTIKPLUS {
 			return this->sock_fd == -1 ? false : true;
 		}
 
-		const APISettings& getAPISettings() const {
+		const APISettings &getAPISettings() const {
 			return this->api_settings;
 		}
 

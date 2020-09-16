@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "enums.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
 	class Sentence {
 
@@ -16,21 +16,21 @@ namespace MIKROTIKPLUS {
 
 		SENTENCE_TYPES type;
 
-		char delimiter;
+		static const char delimiter = '=';
 
 		std::vector<std::string> words;
 
-		std::pair<std::string, std::string> tokenize(const std::string& target);
+		std::pair<std::string, std::string> tokenize(const std::string &target);
 
 	public:
 
-		Sentence() : delimiter('='), type(SENTENCE_TYPES::NONE) { }
+		Sentence(): type(SENTENCE_TYPES::NONE) {}
 
-		const std::string& operator[](size_t index) const {
+		const std::string &operator[](size_t index) const {
 			return this->words[index];
 		}
 
-		const std::string& at(size_t index) const {
+		const std::string &at(size_t index) const {
 			return this->words.at(index);
 		}
 
@@ -48,7 +48,7 @@ namespace MIKROTIKPLUS {
 			this->type = type;
 		}
 
-		void addWord(const std::string& word_to_add) {
+		void addWord(const std::string &word_to_add) {
 			this->words.push_back(word_to_add);
 		}
 
@@ -56,7 +56,7 @@ namespace MIKROTIKPLUS {
 			this->words.clear();
 		}
 
-		friend std::ostream& operator<<(std::ostream& out, const Sentence& sentence);
+		friend std::ostream &operator<<(std::ostream &out, const Sentence &sentence);
 
 	};
 

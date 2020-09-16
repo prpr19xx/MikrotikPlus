@@ -1,9 +1,9 @@
 #include "MikrotikPlus/connector.hpp"
 
-namespace MIKROTIKPLUS {
+namespace MikrotikPlus {
 
-	Connector::Connector(const std::string& ip_address, const std::string& username,
-		const std::string& password, const int port) : api_settings(ip_address, username, password, port, true),
+	Connector::Connector(const std::string &ip_address, const std::string &username,
+		const std::string &password, const int port): api_settings(ip_address, username, password, port, true),
 		sock_fd(-1337) {
 
 #if defined _WIN32
@@ -15,7 +15,7 @@ namespace MIKROTIKPLUS {
 
 		if (wsa_return != 0) {
 
-			std::cerr << "Winsock failed to initialize itself" << "\n";
+			std::cerr << "Winsock was not successfully initialized" << "\n";
 			std::cerr << "Winsock error code: " << wsa_return << "\n";
 			std::cerr << "Terminating the program." << "\n";
 
@@ -33,31 +33,6 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	void Connector::connectAndLogin() {
-
-		connectAPI();
-
-		if (sock_fd != -1) {
-
-			bool loginResult = login();
-
-			if (!loginResult) {
-
-				this->closeSocket();
-
-				throw LoginIncorrect("Invalid login details");
-
-			}
-
-		}
-		else {
-
-			throw NoSocketConnection("Failed to connect to " + this->api_settings.getIP() + ":" + std::to_string(this->api_settings.getPort()) + "\n");
-
-		}
-
-	}
-
 	void Connector::connectAPI() {
 
 		struct sockaddr_in address;
@@ -72,7 +47,7 @@ namespace MIKROTIKPLUS {
 		address.sin_port = htons(this->api_settings.getPort());
 		address_size = sizeof(address);
 
-		connect_result = connect(sock_fd, (struct sockaddr*) & address, address_size);
+		connect_result = connect(sock_fd, (struct sockaddr *) & address, address_size);
 
 		if (connect_result == -1) {
 
@@ -95,7 +70,7 @@ namespace MIKROTIKPLUS {
 		write_sentence.addWord("=name=" + this->api_settings.getUser());
 		write_sentence.addWord("=password=" + this->api_settings.getPassword());
 
-		writeSentence(write_sentence);
+		write(write_sentence);
 
 		read_sentence = readSentence();
 
@@ -131,7 +106,7 @@ namespace MIKROTIKPLUS {
 
 			write_sentence.addWord("=response=00" + md5.hexdigest());
 
-			writeSentence(write_sentence);
+			write(write_sentence);
 
 			read_sentence = readSentence();
 
@@ -159,8 +134,7 @@ namespace MIKROTIKPLUS {
 			send(this->sock_fd, encoded_length_data.data(), 1, 0);
 
 			// 2 Bytes
-		}
-		else if (message_length < 0x4000) {
+		} else if (message_length < 0x4000) {
 
 			encoded_length_data[0] = (message_length >> 8) | 0x80;
 			encoded_length_data[1] = message_length;
@@ -168,8 +142,7 @@ namespace MIKROTIKPLUS {
 			send(this->sock_fd, encoded_length_data.data(), 2, 0);
 
 			// 3 Bytes
-		}
-		else if (message_length < 0x200000) {
+		} else if (message_length < 0x200000) {
 
 			encoded_length_data[0] = (message_length >> 16) | 0xC0;
 			encoded_length_data[1] = message_length >> 8;
@@ -178,8 +151,7 @@ namespace MIKROTIKPLUS {
 			send(this->sock_fd, encoded_length_data.data(), 3, 0);
 
 			// 4 Bytes
-		}
-		else if (message_length < 0x10000000) {
+		} else if (message_length < 0x10000000) {
 
 			encoded_length_data[0] = (message_length >> 24) | 0xE0;
 			encoded_length_data[1] = message_length >> 16;
@@ -189,8 +161,7 @@ namespace MIKROTIKPLUS {
 			send(this->sock_fd, encoded_length_data.data(), 4, 0);
 
 			// 5 Bytes
-		}
-		else {
+		} else {
 
 			encoded_length_data[0] = 0xF0;
 			encoded_length_data[1] = message_length >> 24;
@@ -204,7 +175,7 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	void Connector::writeWord(const std::string& word) {
+	void Connector::write(const std::string &word) {
 
 		encodeLength(word.length());
 
@@ -212,16 +183,16 @@ namespace MIKROTIKPLUS {
 
 	}
 
-	void Connector::writeSentence(const Sentence& write_sentence) {
+	void Connector::write(const Sentence &sentence) {
 
-		for (int i = 0; i < write_sentence.getLength(); ++i) {
+		for (int i = 0; i < sentence.getLength(); ++i) {
 
-			writeWord(write_sentence[i]);
+			write(sentence[i]);
 
 		}
 
 		// Terminate the sentence
-		writeWord("");
+		write("");
 
 	}
 
@@ -237,8 +208,7 @@ namespace MIKROTIKPLUS {
 			*read_length.data() <<= 8;
 			*read_length.data() += (receiveData(1, 0)[0]);
 
-		}
-		else if ((*read_length.data() & 0xE0) == 0xC0) {
+		} else if ((*read_length.data() & 0xE0) == 0xC0) {
 
 			*read_length.data() &= ~0xE0;
 			*read_length.data() <<= 8;
@@ -246,8 +216,7 @@ namespace MIKROTIKPLUS {
 			*read_length.data() <<= 8;
 			*read_length.data() += (receiveData(1, 0)[0]);
 
-		}
-		else if ((*read_length.data() & 0xF0) == 0xE0) {
+		} else if ((*read_length.data() & 0xF0) == 0xE0) {
 
 			*read_length.data() &= ~0xF0;
 			*read_length.data() <<= 8;
@@ -257,8 +226,7 @@ namespace MIKROTIKPLUS {
 			*read_length.data() <<= 8;
 			*read_length.data() += (receiveData(1, 0)[0]);
 
-		}
-		else if ((*read_length.data() & 0xF8) == 0xF0) {
+		} else if ((*read_length.data() & 0xF8) == 0xF0) {
 
 			*read_length.data() += (receiveData(1, 0)[0]);
 			*read_length.data() <<= 8;
@@ -276,11 +244,9 @@ namespace MIKROTIKPLUS {
 
 	std::string Connector::readWord() {
 
-		std::string word;
-
 		const int message_length = decodeLength();
 
-		word = receiveData(message_length, 0);
+		std::string word = receiveData(message_length, 0);
 
 		return word;
 
@@ -300,23 +266,19 @@ namespace MIKROTIKPLUS {
 
 				// Do nothing, skip the other comparisons
 
-			}
-			else if (word.find("!done") != std::string::npos) {
+			} else if (word.find("!done") != std::string::npos) {
 
 				sentence.setType(SENTENCE_TYPES::DONE);
 
-			}
-			else if (word.find("!trap") != std::string::npos) {
+			} else if (word.find("!trap") != std::string::npos) {
 
 				sentence.setType(SENTENCE_TYPES::TRAP);
 
-			}
-			else if (word.find("!fatal") != std::string::npos) {
+			} else if (word.find("!fatal") != std::string::npos) {
 
 				sentence.setType(SENTENCE_TYPES::FATAL);
 
-			}
-			else {
+			} else {
 
 				sentence.setType(SENTENCE_TYPES::CONTINUE);
 
@@ -355,6 +317,7 @@ namespace MIKROTIKPLUS {
 
 				this->closeSocket();
 
+				// I should check this with a return value rather than an exception 
 				throw ConnectionTimedOut("The connection has been timed out whilst reading data");
 
 			}
