@@ -61,6 +61,10 @@ namespace MikrotikPlus {
 		Connector(const std::string &ip_address, const std::string &username,
 			const std::string &password, const int port);
 
+		// We don't need these
+		Connector(const Connector &) = delete;
+		Connector &operator=(const Connector &) = delete;
+
 		virtual ~Connector();
 
 		// Attemps to login into the API
